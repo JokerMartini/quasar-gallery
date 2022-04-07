@@ -2,6 +2,9 @@
   <!-- notice dialogRef here -->
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
+      <q-card-section>
+        <div class="text-h6">New Gallery Item</div>
+      </q-card-section>
       <q-card-section class="q-gutter-md">
         <q-input
           v-model="text"
