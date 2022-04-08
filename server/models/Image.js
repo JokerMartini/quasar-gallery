@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-let userSchema = new Schema(
+let imageSchema = new Schema(
   {
     _id: mongoose.Schema.Types.ObjectId,
     files: {
@@ -11,7 +11,7 @@ let userSchema = new Schema(
     },
   },
   {
-    collection: "users",
+    collection: "images",
   }
 );
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Image", imageSchema);

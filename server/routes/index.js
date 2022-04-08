@@ -6,7 +6,7 @@ router = express.Router();
 const imageThumbnail = require("image-thumbnail");
 
 const DIR = "./public/images";
-const DIRT = "./public/thumbnails";
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, DIR);
@@ -71,7 +71,7 @@ const generate = async (req, res, next) => {
 };
 
 // User model
-let User = require("../models/User");
+let Image = require("../models/Image");
 router.post(
   "/file-upload",
   upload.array("files", 10),
@@ -85,12 +85,12 @@ router.post(
       reqThumbnails.push(url + "/public/thumbnails/" + req.files[i].filename);
     }
 
-    const user = new User({
+    const image = new Image({
       _id: new mongoose.Types.ObjectId(),
       files: reqFiles,
       thumbnails: reqThumbnails,
     });
-    user
+    image
       .save()
       .then((result) => {
         console.log(result);
@@ -112,10 +112,10 @@ router.post(
   }
 );
 router.get("/", (req, res, next) => {
-  User.find().then((data) => {
+  Image.find().then((data) => {
     res.status(200).json({
       message: "Data fetched!",
-      users: data,
+      images: data,
     });
   });
 });

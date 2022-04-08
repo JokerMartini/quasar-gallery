@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-sm">
     <div class="row items-start justify-start q-col-gutter-sm">
-      <div v-for="item in items" :key="item.id" class="col-3">
+      <div v-for="item in imgs" :key="item.id" class="col-3">
         <q-card>
           <q-card-section>
             <q-img :ratio="16 / 9" :src="item.thumbnail" fit="cover" />
@@ -16,12 +16,20 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
+import { useStore } from "vuex";
+import { onMounted } from "vue";
 
 export default defineComponent({
   name: "IndexPage",
+  //call fetch image from store on mount
 
   setup() {
+    const store = useStore();
+    onMounted(() => {
+      console.log(store);
+      store.dispatch("imgs/fetchImageAction");
+    });
     const items = ref([
       {
         id: 1,
@@ -56,6 +64,7 @@ export default defineComponent({
     ]);
     return {
       items,
+      imgs: computed(() => store.getters["imgs/getImages"]),
     };
   },
 });

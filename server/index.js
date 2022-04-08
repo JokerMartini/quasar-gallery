@@ -8,7 +8,7 @@ const userRoute = require("../server/routes/index");
 
 // MongoDB Setup
 mongoose
-  .connect("mongodb://127.0.0.1:27017/imagedatabase")
+  .connect("mongodb://127.0.0.1:27017/image-upload")
   .then((x) => {
     console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`

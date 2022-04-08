@@ -35,6 +35,7 @@
 import { ref } from "vue";
 import { useDialogPluginComponent } from "quasar";
 import axios from "axios";
+import { useStore } from "vuex";
 
 export default {
   props: {
@@ -60,6 +61,7 @@ export default {
 
     const text = ref("");
     const thumbnail = ref(null);
+    const store = useStore();
     return {
       // This is REQUIRED;
       // Need to inject these (from useDialogPluginComponent() call)
@@ -81,6 +83,7 @@ export default {
           .post("http://localhost:4000/api/file-upload", formData, {})
           .then((res) => {
             console.log(res);
+            store.dispatch("imgs/fetchImageAction");
             onDialogOK();
           });
         // or with payload: onDialogOK({ ... })
