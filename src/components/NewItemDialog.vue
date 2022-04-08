@@ -3,17 +3,23 @@
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section>
-        <div class="text-h6">New Gallery Item</div>
+        <div class="text-h6">New Gallery Items</div>
       </q-card-section>
       <q-card-section class="q-gutter-md">
-        <q-input
+        <!-- <q-input
           v-model="text"
           label="Name"
           placeholder="Enter text"
           type="text"
           filled
+        /> -->
+        <q-file
+          @change="uploadFile"
+          filled
+          v-model="thumbnail"
+          label="Thumbnail"
+          multiple
         />
-        <q-file filled v-model="thumbnail" label="Thumbnail" />
       </q-card-section>
 
       <!-- buttons example -->
@@ -28,6 +34,7 @@
 <script>
 import { ref } from "vue";
 import { useDialogPluginComponent } from "quasar";
+import axios from "axios";
 
 export default {
   props: {
@@ -66,8 +73,16 @@ export default {
       onOKClick() {
         // on OK, it is REQUIRED to
         // call onDialogOK (with optional payload)
-        console.log(text.value, thumbnail.value);
-        onDialogOK();
+        const formData = new FormData();
+        for (const i of Object.keys(thumbnail.value)) {
+          formData.append("files", thumbnail.value[i]);
+        }
+        axios
+          .post("http://localhost:4000/api/file-upload", formData, {})
+          .then((res) => {
+            console.log(res);
+            onDialogOK();
+          });
         // or with payload: onDialogOK({ ... })
         // ...and it will also hide the dialog automatically
       },
