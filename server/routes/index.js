@@ -1,9 +1,8 @@
 let express = require("express"),
   multer = require("multer"),
   mongoose = require("mongoose"),
-  sharp = require("sharp");
+  jimp = require("jimp");
 router = express.Router();
-const imageThumbnail = require("image-thumbnail");
 
 const DIR = "./public/images";
 
@@ -16,15 +15,6 @@ const storage = multer.diskStorage({
     cb(null, fileName);
   },
 });
-// const Tstorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, DIRT);
-//   },
-//   filename: (req, file, cb) => {
-//     const fileName = file.originalname.toLowerCase().split(" ").join("-");
-//     cb(null, fileName);
-//   },
-// });
 
 var upload = multer({
   storage: storage,
@@ -46,26 +36,17 @@ var upload = multer({
 //generate thumbnail
 const generate = async (req, res, next) => {
   for (var i = 0; i < req.files.length; i++) {
-    // imageThumbnail(req.files[i].path, { width: 50, height: 50 })
-    //   .then((thumbnail) => {
-    //     upload;
-    //     console.log(thumbnail);
-    //   })
-    //   .catch((err) => console.error(err));
-
-    await sharp(req.files[i].path)
-      .resize(200, 200)
-      .toFile(
-        "public/thumbnails/" +
-          req.files[i].originalname.toLowerCase().split(" ").join("-"),
-        (err, resizeImage) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(resizeImage);
-          }
-        }
-      );
+    const fileName = req.files[i].originalname
+      .toLowerCase()
+      .split(" ")
+      .join("-");
+    jimp.read(req.files[i].path, (err, image) => {
+      if (err) throw err;
+      image
+        .resize(200, 200)
+        .quality(60)
+        .write("public/thumbnails/" + fileName);
+    });
   }
   next();
 };
