@@ -43,8 +43,8 @@ const generate = async (req, res, next) => {
     jimp.read(req.files[i].path, (err, image) => {
       if (err) throw err;
       image
-        .resize(200, 200)
-        .quality(60)
+        .cover(400, 400)
+        .quality(85)
         .write("public/thumbnails/" + fileName);
     });
   }
